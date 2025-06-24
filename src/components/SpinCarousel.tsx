@@ -7,7 +7,25 @@ interface SpinCarouselProps {
   images?: string[];
   onItemSelected?: (item: string) => void;
   nftRarity?: 'none' | 'uncommon' | 'epic' | 'legendary';
+  spinCost?: number;
+  freeSpinsRemaining?: number;
+  hasEnoughTokens?: boolean;
 }
+
+// Simple game info for Phase 1
+const gameInfo: Record<string, { name: string; genre: string }> = {
+  "/A0PG.png": { name: "A0PG", genre: "Action/Adventure" },
+  "/animeball.png": { name: "Anime Ball", genre: "Sports" },
+  "/BladesRng.avif": { name: "Blades RNG", genre: "Collection/RNG" },
+  "/bombdoor.png": { name: "Bomb Door", genre: "Puzzle/Strategy" },
+  "/dragonblox.png": { name: "Dragon Blox", genre: "RPG/Adventure" },
+  "/greedy.png": { name: "Greedy", genre: "Strategy/Economy" },
+  "/heroes.avif": { name: "Heroes", genre: "RPG/Strategy" },
+  "/obby.webp": { name: "Obby Adventure", genre: "Platformer" },
+  "/treesmash.png": { name: "Tree Smash", genre: "Action/Arcade" },
+  "/wallball.webp": { name: "Wall Ball", genre: "Physics/Sports" },
+  "/westport.avif": { name: "Westport", genre: "Simulation/Adventure" }
+};
 
 // NFT boost configuration
 const nftBoosts = {
@@ -35,7 +53,10 @@ const itemWeights = [
 export default function SpinCarousel({ 
   images,
   onItemSelected,
-  nftRarity = 'none'
+  nftRarity = 'none',
+  spinCost = 0,
+  freeSpinsRemaining = 0,
+  hasEnoughTokens = true
 }: SpinCarouselProps) {
   // Generate carousel array based on weights (deterministic)
   const generateCarouselImages = () => {
@@ -225,6 +246,7 @@ export default function SpinCarousel({
           {carouselImages.map((src, index) => {
             const itemWeight = itemWeights.find(item => item.image === src)?.weight || 1;
             const rarity = getItemRarity(itemWeight);
+            const currentGameInfo = gameInfo[src];
             
             // Check of dit het daadwerkelijk winnende item is
             // Het winnende item wordt getoond als het in de gouden zone staat EN overeenkomt met winningItem
@@ -254,11 +276,19 @@ export default function SpinCarousel({
                   
                   <Image
                     src={src}
-                    alt={`Carousel image ${index + 1}`}
+                    alt={currentGameInfo?.name || `Carousel image ${index + 1}`}
                     width={150}
                     height={80}
                     className="object-contain"
                   />
+                  
+                  {/* Game Name */}
+                  {currentGameInfo && (
+                    <div className="mt-1 text-center">
+                      <p className="text-xs font-bold text-gray-800 truncate w-full">{currentGameInfo.name}</p>
+                      <p className="text-xs text-gray-500 truncate w-full">{currentGameInfo.genre}</p>
+                    </div>
+                  )}
                 </div>
               </div>
             );
@@ -268,14 +298,25 @@ export default function SpinCarousel({
       
       <button
         onClick={handleSpin}
-        disabled={isSpinning}
+        disabled={isSpinning || (!hasEnoughTokens && freeSpinsRemaining === 0)}
         className={`px-12 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform ${
           isSpinning 
             ? "bg-gray-400 cursor-not-allowed scale-95" 
+            : (!hasEnoughTokens && freeSpinsRemaining === 0)
+            ? "bg-red-500 cursor-not-allowed scale-95 text-white"
+            : freeSpinsRemaining > 0
+            ? "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
             : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
         }`}
       >
-        {isSpinning ? "🎰 Spinning..." : "🎲 SPIN"}
+        {isSpinning 
+          ? "🎰 Spinning..." 
+          : (!hasEnoughTokens && freeSpinsRemaining === 0)
+          ? `❌ Not enough $SLING (${spinCost} needed)`
+          : freeSpinsRemaining > 0 
+          ? `🎁 FREE SPIN (${freeSpinsRemaining} left)`
+          : `🎲 SPIN (${spinCost} $SLING)`
+        }
       </button>
 
       {/* Drop Chance Legend */}
