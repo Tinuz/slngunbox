@@ -42,6 +42,7 @@ const nftRarityBoosts = {
 
 // Game info mapping for unbox modal
 const gameInfo: Record<string, { name: string; genre: string; description: string; players: number }> = {
+  "/mystery-box": { name: "Daily Mystery Box", genre: "Special Reward", description: "Exclusive daily rewards for stakers and NFT holders", players: 0 },
   "/A0PG.png": { name: "A0PG", genre: "Action/Adventure", description: "Action-packed adventure game", players: 1250 },
   "/animeball.png": { name: "Anime Ball", genre: "Sports", description: "Anime-style ball sports game", players: 3400 },
   "/BladesRng.avif": { name: "Blades RNG", genre: "Collection/RNG", description: "Random number generation collectible game", players: 2100 },
@@ -66,6 +67,21 @@ const rarities = [
 
 // Game-specific rewards with multiple themed categories
 const gameRewards: Record<string, { items: Array<{ name: string; type: 'weapon' | 'cosmetic' | 'currency' | 'powerup' | 'collectible'; icon: string; description: string }> }> = {
+  "/mystery-box": {
+    items: [
+      // Exclusive mystery box items - higher value and unique
+      { name: "Legendary Staker Sword", type: "weapon", icon: "⚔️", description: "Exclusive weapon for loyal stakers" },
+      { name: "Diamond Staking Badge", type: "cosmetic", icon: "💎", description: "Shows your dedication to the platform" },
+      { name: "Bonus SLING Tokens", type: "currency", icon: "🪙", description: "Extra tokens as staking reward" },
+      { name: "Staker's Fortune", type: "powerup", icon: "🍀", description: "Increases all future rewards" },
+      { name: "NFT Fragment", type: "collectible", icon: "🧩", description: "Collect fragments to forge rare NFTs" },
+      { name: "Mystery Chest Key", type: "collectible", icon: "🗝️", description: "Unlocks special treasure chests" },
+      { name: "Loyalty Crown", type: "cosmetic", icon: "👑", description: "Crown for the most loyal supporters" },
+      { name: "Staking Multiplier", type: "powerup", icon: "⚡", description: "Boosts staking rewards temporarily" },
+      { name: "Platform Shares", type: "currency", icon: "📈", description: "Exclusive platform revenue shares" },
+      { name: "Golden Ticket", type: "collectible", icon: "🎫", description: "Access to exclusive future drops" }
+    ]
+  },
   "/A0PG.png": {
     items: [
       { name: "Plasma Sword", type: "weapon", icon: "⚔️", description: "High-tech energy blade" },

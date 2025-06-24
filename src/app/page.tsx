@@ -39,6 +39,12 @@ export default function Home() {
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
   const [showInventory, setShowInventory] = useState(false);
 
+  // Daily Mystery Box system
+  const [stakedAmount, setStakedAmount] = useState(0); // Amount of $SLING staked
+  const [lastMysteryBoxClaim, setLastMysteryBoxClaim] = useState<string>('');
+  const [mysteryBoxAvailable, setMysteryBoxAvailable] = useState(false);
+  const [showMysteryBoxModal, setShowMysteryBoxModal] = useState(false);
+
   // Spin costs configuration
   const spinCosts = {
     base: 100, // Base cost in $SLING
@@ -83,11 +89,54 @@ export default function Home() {
     }
   };
 
-  // Initialize NFT check and daily reset on component mount
+  // Daily Mystery Box logic
+  const checkMysteryBoxEligibility = () => {
+    const today = new Date().toDateString();
+    
+    // Check if user has staked $SLING or owns NFTs
+    const isEligible = stakedAmount > 0 || nftRarity !== 'none';
+    
+    // Check if mystery box was already claimed today
+    const alreadyClaimedToday = lastMysteryBoxClaim === today;
+    
+    setMysteryBoxAvailable(isEligible && !alreadyClaimedToday);
+  };
+
+  // Simulate staking check (in real app, this would check staked amount from smart contract)
+  const checkStakingStatus = () => {
+    // For demo purposes, randomly assign staked amount
+    // In real app, this would query the staking contract
+    const random = Math.random();
+    if (random > 0.7) {
+      setStakedAmount(Math.floor(Math.random() * 5000) + 1000); // 1000-6000 staked
+    } else {
+      setStakedAmount(0); // No staking
+    }
+  };
+
+  const handleMysteryBoxClaim = () => {
+    if (!mysteryBoxAvailable) return;
+    
+    const today = new Date().toDateString();
+    setLastMysteryBoxClaim(today);
+    setMysteryBoxAvailable(false);
+    
+    // Open mystery box modal
+    setSelectedItem('/mystery-box'); // Special mystery box identifier
+    setShowMysteryBoxModal(true);
+  };
+
+  // Initialize all checks on component mount
   useEffect(() => {
     checkNFTOwnership();
+    checkStakingStatus();
     checkDailyReset();
   }, []);
+
+  // Check mystery box eligibility when staking or NFT status changes
+  useEffect(() => {
+    checkMysteryBoxEligibility();
+  }, [stakedAmount, nftRarity, lastMysteryBoxClaim]);
 
   const handleItemSelected = (item: string) => {
     const spinCost = getCurrentSpinCost();
@@ -155,8 +204,8 @@ export default function Home() {
       
       <main className="flex-1 flex items-center justify-center container max-w-screen-lg mx-auto p-4">
         <div className="py-20 w-full">
-          {/* Token Balance, NFT Status, and Inventory Button */}
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-8">
+          {/* Token Balance, NFT Status, Mystery Box, and Inventory Button */}
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-8 flex-wrap">
             {/* Inventory Button */}
             <button
               onClick={() => setShowInventory(true)}
@@ -167,6 +216,36 @@ export default function Home() {
                 <p className="text-lg font-bold">{inventory.length} items</p>
               </div>
             </button>
+
+            {/* Daily Mystery Box */}
+            <div className="relative">
+              <button
+                onClick={handleMysteryBoxClaim}
+                disabled={!mysteryBoxAvailable}
+                className={`rounded-xl px-6 py-3 shadow-lg transform transition-all duration-300 ${
+                  mysteryBoxAvailable
+                    ? "bg-gradient-to-r from-yellow-400 to-orange-500 text-white hover:shadow-xl hover:scale-105 animate-pulse"
+                    : "bg-gray-400 text-gray-700 cursor-not-allowed opacity-50"
+                }`}
+              >
+                <div className="text-center">
+                  <p className="text-sm font-medium opacity-90">
+                    {mysteryBoxAvailable ? "🎁 Daily Mystery Box" : "⏰ Mystery Box"}
+                  </p>
+                  <p className="text-lg font-bold">
+                    {mysteryBoxAvailable ? "CLAIM NOW!" : "Tomorrow"}
+                  </p>
+                  {(stakedAmount > 0 || nftRarity !== 'none') && (
+                    <p className="text-xs opacity-90">
+                      {stakedAmount > 0 ? `💎 ${stakedAmount.toLocaleString()} staked` : `✨ ${nftRarity.toUpperCase()} NFT`}
+                    </p>
+                  )}
+                </div>
+              </button>
+              {mysteryBoxAvailable && (
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></div>
+              )}
+            </div>
 
             {/* Token Balance */}
             <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl px-8 py-4 shadow-lg">
@@ -295,6 +374,17 @@ export default function Home() {
         selectedItem={selectedItem}
         onClose={handleCloseModal}
         onNewSpin={handleNewSpin}
+        onTokensEarned={handleTokensEarned}
+        onItemsClaimed={handleItemsClaimed}
+        nftRarity={nftRarity}
+      />
+
+      {/* Mystery Box Modal */}
+      <UnboxModal 
+        isOpen={showMysteryBoxModal}
+        selectedItem="/mystery-box"
+        onClose={() => setShowMysteryBoxModal(false)}
+        onNewSpin={() => setShowMysteryBoxModal(false)}
         onTokensEarned={handleTokensEarned}
         onItemsClaimed={handleItemsClaimed}
         nftRarity={nftRarity}
