@@ -64,7 +64,7 @@ export default function Home() {
             <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl px-8 py-4 shadow-lg">
               <div className="text-center">
                 <p className="text-sm font-medium opacity-90">Your Balance</p>
-                <p className="text-3xl font-bold">{totalTokens.toLocaleString()} $SLANG</p>
+                <p className="text-3xl font-bold">{totalTokens.toLocaleString()} $SLING</p>
               </div>
             </div>
 

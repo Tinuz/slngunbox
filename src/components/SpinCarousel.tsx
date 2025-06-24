@@ -9,7 +9,7 @@ interface SpinCarouselProps {
   nftRarity?: 'none' | 'uncommon' | 'epic' | 'legendary';
 }
 
-// NFT boost configuratie
+// NFT boost configuration
 const nftBoosts = {
   none: { multiplier: 1.0, label: 'No NFT', rarityBoost: 0, color: 'text-gray-600' },
   uncommon: { multiplier: 1.25, label: 'Uncommon NFT', rarityBoost: 15, color: 'text-blue-600' },
@@ -17,19 +17,19 @@ const nftBoosts = {
   legendary: { multiplier: 2.0, label: 'Legendary NFT', rarityBoost: 60, color: 'text-yellow-600' }
 };
 
-// Gewogen items met kansen (hogere weight = hogere kans)
+// Weighted items with chances (higher weight = higher chance)
 const itemWeights = [
-  { image: "/A0PG.png", weight: 5 },           // Laag
-  { image: "/animeball.png", weight: 15 },     // Hoog
+  { image: "/A0PG.png", weight: 5 },           // Low
+  { image: "/animeball.png", weight: 15 },     // High
   { image: "/BladesRng.avif", weight: 8 },     // Medium
-  { image: "/bombdoor.png", weight: 12 },      // Hoog
-  { image: "/dragonblox.png", weight: 3 },     // Zeer laag
-  { image: "/greedy.png", weight: 18 },        // Zeer hoog
+  { image: "/bombdoor.png", weight: 12 },      // High
+  { image: "/dragonblox.png", weight: 3 },     // Very low
+  { image: "/greedy.png", weight: 18 },        // Very high
   { image: "/heroes.avif", weight: 7 },        // Medium
-  { image: "/obby.webp", weight: 10 },         // Medium-hoog
-  { image: "/treesmash.png", weight: 14 },     // Hoog
-  { image: "/wallball.webp", weight: 6 },      // Laag-medium
-  { image: "/westport.avif", weight: 2 }       // Zeer laag
+  { image: "/obby.webp", weight: 10 },         // Medium-high
+  { image: "/treesmash.png", weight: 14 },     // High
+  { image: "/wallball.webp", weight: 6 },      // Low-medium
+  { image: "/westport.avif", weight: 2 }       // Very low
 ];
 
 export default function SpinCarousel({ 
@@ -37,18 +37,18 @@ export default function SpinCarousel({
   onItemSelected,
   nftRarity = 'none'
 }: SpinCarouselProps) {
-  // Genereer carrousel array gebaseerd op gewichten (deterministisch)
+  // Generate carousel array based on weights (deterministic)
   const generateCarouselImages = () => {
     const carouselArray: string[] = [];
     
     itemWeights.forEach(item => {
-      // Voeg items toe gebaseerd op hun gewicht (gewicht = aantal keer dat ze verschijnen)
+      // Add items based on their weight (weight = number of times they appear)
       for (let i = 0; i < item.weight; i++) {
         carouselArray.push(item.image);
       }
     });
     
-    // Geen shuffle voor consistente server/client rendering
+    // No shuffle for consistent server/client rendering
     return carouselArray;
   };
 
@@ -56,7 +56,7 @@ export default function SpinCarousel({
   const [isClient, setIsClient] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [winningItem, setWinningItem] = useState<string>(''); // Track het winnende item
+  const [winningItem, setWinningItem] = useState<string>(''); // Track the winning item
   const carouselRef = useRef<HTMLDivElement>(null);
 
   // Initialize carousel images after component mounts
@@ -68,7 +68,7 @@ export default function SpinCarousel({
     const shuffledImages = [...initialImages].sort(() => Math.random() - 0.5);
     setCarouselImages(shuffledImages);
     
-    // Start met het eerste item in het midden (index 1 positie)
+    // Start with the first item in the middle (index 1 position)
     setSelectedIndex(1);
   }, [images]);
 
@@ -87,7 +87,7 @@ export default function SpinCarousel({
     const modifiedWeights = itemWeights.map(item => {
       let boostedWeight = item.weight;
       
-      // NFT boost: verhoog kans op rare items (lagere weight = zeldzamer)
+      // NFT boost: increase chance for rare items (lower weight = rarer)
       if (nftRarity !== 'none' && item.weight <= 8) { // Rare, Epic, Legendary items
         boostedWeight = item.weight * currentBoost.multiplier;
       }
@@ -120,7 +120,7 @@ export default function SpinCarousel({
     setIsSpinning(true);
     setWinningItem(''); // Reset het winnende item
     
-    // Gebruik gewogen willekeurige selectie (met NFT boost) om het winnende item direct te bepalen
+    // Use weighted random selection (with NFT boost) to determine the winning item directly
     const targetIndex = getWeightedRandomIndex();
     
     // Validatie: zorg dat targetIndex binnen bereik is
@@ -144,7 +144,7 @@ export default function SpinCarousel({
       // Stel het winnende item in (dit is consistent met de visuele selectie)
       setWinningItem(chosenItem);
       
-      // Verhoogde delay zodat gebruikers het winnende item kunnen zien
+      // Increased delay so users can see the winning item
       if (onItemSelected) {
         setTimeout(() => {
           // Stuur het daadwerkelijk gekozen item naar de modal

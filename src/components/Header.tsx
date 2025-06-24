@@ -5,6 +5,9 @@ import { ConnectButton } from "thirdweb/react";
 import { client } from "../app/client";
 
 export default function Header() {
+  // Check if we have a valid client ID
+  const hasValidClient = process.env.NEXT_PUBLIC_TEMPLATE_CLIENT_ID || process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID;
+
   return (
     <header className="w-full bg-white shadow-lg border-b border-gray-200">
       <div className="w-full px-6 py-4">
@@ -23,13 +26,19 @@ export default function Header() {
           
           {/* Connect Button uiterst rechts */}
           <div className="flex items-center">
-            <ConnectButton
-              client={client}
-              appMetadata={{
-                name: "SLNGUNBOX",
-                url: "https://SLNGUNBOX.com",
-              }}
-            />
+            {hasValidClient ? (
+              <ConnectButton
+                client={client}
+                appMetadata={{
+                  name: "SLNGUNBOX",
+                  url: "https://SLNGUNBOX.com",
+                }}
+              />
+            ) : (
+              <div className="bg-gray-200 text-gray-600 px-4 py-2 rounded-lg text-sm">
+                Connect Wallet (Setup Required)
+              </div>
+            )}
           </div>
         </div>
       </div>

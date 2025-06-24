@@ -12,7 +12,7 @@ interface UnboxModalProps {
   nftRarity?: 'none' | 'uncommon' | 'epic' | 'legendary';
 }
 
-// NFT boost configuratie voor rarity rolls
+// NFT boost configuration for rarity rolls
 const nftRarityBoosts = {
   none: { chanceMod: 0, label: 'Standard' },
   uncommon: { chanceMod: 15, label: 'Uncommon NFT' },
@@ -37,19 +37,19 @@ export default function UnboxModal({ isOpen, selectedItem, onClose, onNewSpin, o
   const getRandomRarity = () => {
     const currentBoost = nftRarityBoosts[nftRarity];
     
-    // NFT boost: verhoog kans op betere rariteiten
+    // NFT boost: increase chance for better rarities
     let modifiedRarities = [...rarities];
     
     if (nftRarity !== 'none') {
-      // Verschuif kansen gebaseerd op NFT rarity boost
+      // Adjust chances based on NFT rarity boost
       const boostAmount = currentBoost.chanceMod;
       
       modifiedRarities = [
-        { ...rarities[0], chance: Math.max(10, 50 - boostAmount) }, // Common: verminder met boost
-        { ...rarities[1], chance: Math.max(10, 30 - boostAmount * 0.3) }, // Uncommon: licht verminderen
-        { ...rarities[2], chance: 15 + boostAmount * 0.4 }, // Rare: verhogen
-        { ...rarities[3], chance: 4 + boostAmount * 0.4 }, // Epic: verhogen
-        { ...rarities[4], chance: 1 + boostAmount * 0.2 }   // Legendary: verhogen
+        { ...rarities[0], chance: Math.max(10, 50 - boostAmount) }, // Common: reduce with boost
+        { ...rarities[1], chance: Math.max(10, 30 - boostAmount * 0.3) }, // Uncommon: slightly reduce
+        { ...rarities[2], chance: 15 + boostAmount * 0.4 }, // Rare: increase
+        { ...rarities[3], chance: 4 + boostAmount * 0.4 }, // Epic: increase
+        { ...rarities[4], chance: 1 + boostAmount * 0.2 }   // Legendary: increase
       ];
     }
     
@@ -293,7 +293,7 @@ export default function UnboxModal({ isOpen, selectedItem, onClose, onNewSpin, o
                   </div>
                   <div className="text-center">
                     <p className="text-gray-600">Sell Value</p>
-                    <p className="font-bold text-green-600">{selectedRarity.sellPrice} $SLANG</p>
+                    <p className="font-bold text-green-600">{selectedRarity.sellPrice} $SLING</p>
                   </div>
                 </div>
               </div>
@@ -304,7 +304,7 @@ export default function UnboxModal({ isOpen, selectedItem, onClose, onNewSpin, o
                   onClick={handleSell}
                   className="px-8 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
                 >
-                  💰 Sell for {selectedRarity.sellPrice} $SLANG
+                  💰 Sell for {selectedRarity.sellPrice} $SLING
                 </button>
                 
                 <button
@@ -324,7 +324,7 @@ export default function UnboxModal({ isOpen, selectedItem, onClose, onNewSpin, o
                 <h3 className="text-3xl font-bold text-green-600 mb-4">💰 SOLD!</h3>
                 <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl p-6 shadow-xl">
                   <p className="text-lg mb-2">You received:</p>
-                  <p className="text-4xl font-bold">{selectedRarity.sellPrice} $SLANG</p>
+                  <p className="text-4xl font-bold">{selectedRarity.sellPrice} $SLING</p>
                 </div>
               </div>
 

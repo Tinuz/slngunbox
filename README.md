@@ -1,25 +1,103 @@
 
-![tw-banner](https://github.com/thirdweb-example/next-starter/assets/57885104/20c8ce3b-4e55-4f10-ae03-2fe4743a5ee8)
+# 🎰 SLNGUNBOX - NFT Lootbox Platform
 
-# thirdweb-next-starter
+An interactive lootbox/unbox web application built with Next.js, Tailwind CSS and Thirdweb for Web3 integration.
 
-Starter template to build an onchain react native app with [thirdweb](https://thirdweb.com/) and [next](https://nextjs.org/).
+## ✨ Features
 
-## Installation
+- 🎲 **Interactive Lootbox Carousel**: Horizontal carousel with weighted item selection
+- 🎖️ **NFT Boost System**: Different NFT rarities (Uncommon, Epic, Legendary) with unique boosts
+- 🎯 **Weighted Chances**: Fair RNG with visible drop rates
+- 💰 **$SLANG Token System**: Earn and manage your tokens
+- 🔗 **Web3 Integration**: Wallet connection via Thirdweb
+- 📱 **Responsive Design**: Works perfectly on all devices
 
-Install the template using [thirdweb create](https://portal.thirdweb.com/cli/create)
+## 🚀 Getting Started
 
-```bash
-  npx thirdweb create app --next
-```
+### Prerequisites
+
+- Node.js 18+ 
+- NPM or Yarn
+- Thirdweb account (for wallet connection)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd slngunbox
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Setup Environment Variables**
+   ```bash
+   cp .env.example .env.local
+   ```
+   
+   Fill in your Thirdweb Client ID:
+   ```env
+   NEXT_PUBLIC_THIRDWEB_CLIENT_ID=your_thirdweb_client_id_here
+   ```
+
+4. **Get Thirdweb Client ID**
+   - Go to [Thirdweb Portal](https://portal.thirdweb.com/)
+   - Create an account and new project
+   - Copy your Client ID
+   - Add it to your `.env.local` file
+
+5. **Start development server**
+   ```bash
+   npm run dev
+   ```
 
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file:
 
-`CLIENT_ID`
+**Required:**
+```env
+NEXT_PUBLIC_THIRDWEB_CLIENT_ID=your_thirdweb_client_id_here
+```
 
-To learn how to create a client ID, refer to the [client documentation](https://portal.thirdweb.com/typescript/v5/client). 
+**Optional (legacy support):**
+```env
+NEXT_PUBLIC_TEMPLATE_CLIENT_ID=your_thirdweb_client_id_here
+```
+
+To learn how to create a client ID, refer to the [client documentation](https://portal.thirdweb.com/typescript/v5/client).
+
+## 🎮 NFT Boost System
+
+### NFT Rarities & Boosts:
+
+| NFT Rarity | Drop Boost | Rarity Boost | Color |
+|------------|------------|--------------|-------|
+| **Uncommon** 🔵 | +25% | +15% | Blue |
+| **Epic** 🟣 | +50% | +35% | Purple |
+| **Legendary** 🟡 | +100% | +60% | Gold |
+
+## 🚀 Deployment
+
+### Vercel Deployment
+
+1. **Push to GitHub** and make sure to set environment variables in Vercel
+2. **Environment Variables in Vercel:**
+   - Go to Project Settings → Environment Variables
+   - Add `NEXT_PUBLIC_THIRDWEB_CLIENT_ID`
+   - Deploy!
+
+## 🐛 Troubleshooting
+
+### Build Errors Fixed
+
+**✅ "No client ID provided" - FIXED**
+- Environment variable fallback added
+- Graceful degradation during build process
+- Placeholder client ID for development
 
 ## Run locally
 
@@ -35,25 +113,15 @@ Start development server
 yarn dev
 ```
 
-Create a production build
-
-```bash
-yarn build
-```
-
-Preview the production build
-
-```bash
-yarn start
-```
-
 ## Resources
 
 - [Documentation](https://portal.thirdweb.com/typescript/v5)
 - [Templates](https://thirdweb.com/templates)
-- [YouTube](https://www.youtube.com/c/thirdweb)
-- [Blog](https://blog.thirdweb.com)
 
 ## Need help?
 
 For help or feedback, please [visit our support site](https://thirdweb.com/support)
+
+---
+
+**🎮 Happy Gaming! Enjoy your lootbox adventures!** 🎲✨
